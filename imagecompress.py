@@ -5,7 +5,6 @@ from scipy.io.wavfile import write
 
 img = cv2.imread('img/sheetmusic.jpg',0)
 
-
 # Convert image to np array, shift DC to center of image
 dft = cv2.dft(np.float32(img),flags = cv2.DFT_COMPLEX_OUTPUT) 
 dft_shift = np.fft.fftshift(dft)
@@ -35,7 +34,7 @@ maskHPF[crow-50:crow+50, ccol-50:ccol+50] = 0 # HPF - creates box of 0's in cent
 
 
 # apply mask and inverse DFT
-fshift = dft_shift*maskLPF
+fshift = dft_shift #*maskLPF
 f_ishift = np.fft.ifftshift(fshift)
 img_back = cv2.idft(f_ishift)
 img_back = cv2.magnitude(img_back[:,:,0],img_back[:,:,1])
@@ -47,9 +46,17 @@ scaled_arr = np.int16(reshape_arr/np.max(reshape_arr) * 32767)
 
 full_sample = np.append(img_size, scaled_arr)
 
+# Generate audio from frequency domain rather than original image
+reshape_arr2 = np.reshape(fshift, np.product(fshift.shape))
+
+scaled_arr2 = np.int16(reshape_arr2/np.abs(np.max(reshape_arr2)) * 32767)
+np.savetxt("array.txt", scaled_arr2, newline=" ")
+
+full_sample2 = np.append(img_size, scaled_arr2)
 
 
-write('test.wav', 44100, scaled_arr)
+
+write('test.wav', 44100, scaled_arr2)
 
 
 # plt.subplot(121),plt.imshow(img, cmap = 'gray')
