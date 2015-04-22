@@ -1,8 +1,9 @@
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
+from scipy.io.wavfile import write
 
-img = cv2.imread('img/img.jpg',0)
+img = cv2.imread('img/flower.jpg',0)
 
 
 # Convert image to np array, shift DC to center of image
@@ -33,13 +34,24 @@ maskHPF[crow-50:crow+50, ccol-50:ccol+50] = 0 # HPF - creates box of 0's in cent
 
 
 # apply mask and inverse DFT
-fshift = dft_shift*maskHPF
+fshift = dft_shift*maskLPF
 f_ishift = np.fft.ifftshift(fshift)
 img_back = cv2.idft(f_ishift)
 img_back = cv2.magnitude(img_back[:,:,0],img_back[:,:,1])
 
-plt.subplot(121),plt.imshow(img, cmap = 'gray')
-plt.title('Input Image'), plt.xticks([]), plt.yticks([])
-plt.subplot(122),plt.imshow(img_back, cmap = 'gray')
-plt.title('Magnitude Spectrum'), plt.xticks([]), plt.yticks([])
-plt.show()
+reshape_arr = np.reshape(img_back, np.product(img_back.shape))
+
+scaled_arr = np.int16(reshape_arr/np.max(np.abs(reshape_arr)) * 32767)
+
+
+write('test.wav', 44100, scaled_arr)
+
+
+# plt.subplot(121),plt.imshow(img, cmap = 'gray')
+# plt.title('Input Image'), plt.xticks([]), plt.yticks([])
+# plt.subplot(122),plt.imshow(img_back, cmap = 'gray')
+# plt.title('Magnitude Spectrum'), plt.xticks([]), plt.yticks([])
+# plt.show()
+
+# TODO: Implement soundcloud API, but also figure out how to go from wav file back to 2d numpy array representing image
+# Because we have to store image as 1D array, we need to add data to np array representing info about the size of the image 
