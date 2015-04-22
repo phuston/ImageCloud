@@ -42,10 +42,11 @@ img_back = cv2.magnitude(img_back[:,:,0],img_back[:,:,1])
 
 # Reshapes 2D array into 1D array
 reshape_arr = np.reshape(img_back, np.product(img_back.shape))
+scalar = np.max(reshape_arr) * 32767
+scalar = np.array([scalar])
+scaled_arr = np.int16(reshape_arr/scalar)
 
-scaled_arr = np.int16(reshape_arr/np.max(reshape_arr) * 32767)
-
-full_sample = np.append(img_size, scaled_arr)
+full_sample = np.concatenate([img_size, scalar, scaled_arr])
 
 
 
