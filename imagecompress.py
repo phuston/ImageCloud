@@ -3,7 +3,7 @@ import cv2
 from matplotlib import pyplot as plt
 from scipy.io.wavfile import write
 
-img = cv2.imread('img/flower.jpg',0)
+img = cv2.imread('img/sheetmusic.jpg',0)
 
 
 # Convert image to np array, shift DC to center of image
@@ -21,6 +21,7 @@ magnitude_spectrum = 20*np.log(cv2.magnitude(dft_shift[:,:,0],dft_shift[:,:,1]))
 # plt.show()
 
 rows, cols = img.shape
+img_size = np.array([rows,cols])
 crow,ccol = rows/2 , cols/2
 
 # create a mask first, center square is 1, remaining all zeros
@@ -39,9 +40,13 @@ f_ishift = np.fft.ifftshift(fshift)
 img_back = cv2.idft(f_ishift)
 img_back = cv2.magnitude(img_back[:,:,0],img_back[:,:,1])
 
+# Reshapes 2D array into 1D array
 reshape_arr = np.reshape(img_back, np.product(img_back.shape))
 
-scaled_arr = np.int16(reshape_arr/np.max(np.abs(reshape_arr)) * 32767)
+scaled_arr = np.int16(reshape_arr/np.max(reshape_arr) * 32767)
+
+full_sample = np.append(img_size, scaled_arr)
+
 
 
 write('test.wav', 44100, scaled_arr)
