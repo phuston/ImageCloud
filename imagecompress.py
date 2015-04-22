@@ -3,7 +3,7 @@ import cv2
 from matplotlib import pyplot as plt
 from scipy.io.wavfile import write
 
-img = cv2.imread('img/sheetmusic.jpg',0)
+img = cv2.imread('img/md1.jpg',0)
 
 # Convert image to np array, shift DC to center of image
 dft = cv2.dft(np.float32(img),flags = cv2.DFT_COMPLEX_OUTPUT) 
@@ -39,9 +39,11 @@ f_ishift = np.fft.ifftshift(fshift)
 img_back = cv2.idft(f_ishift)
 img_back = cv2.magnitude(img_back[:,:,0],img_back[:,:,1])
 
+
 # Reshapes 2D array into 1D array
 reshape_arr = np.reshape(img_back, np.product(img_back.shape))
-
+arr_max = np.max(reshape_arr)
+scalar = 32767
 scaled_arr = np.int16(reshape_arr/np.max(reshape_arr) * 32767)
 
 full_sample = np.append(img_size, scaled_arr)
@@ -52,11 +54,13 @@ reshape_arr2 = np.reshape(fshift, np.product(fshift.shape))
 scaled_arr2 = np.int16(reshape_arr2/np.abs(np.max(reshape_arr2)) * 32767)
 np.savetxt("array.txt", scaled_arr2, newline=" ")
 
-full_sample2 = np.append(img_size, scaled_arr2)
+
+full_sample = np.concatenate([img_size, np.array([arr_max,scalar]), scaled_arr2])
+print full_sample
 
 
+write('test.wav', 44100, full_sample)
 
-write('test.wav', 44100, scaled_arr2)
 
 
 # plt.subplot(121),plt.imshow(img, cmap = 'gray')
