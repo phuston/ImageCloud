@@ -49,7 +49,7 @@ full_sample = np.append(img_size, scaled_arr)
 
 
 
-write('test.wav', 44100, scaled_arr)
+write('test.wav', 44100, full_sample)
 
 
 # plt.subplot(121),plt.imshow(img, cmap = 'gray')
