@@ -11,6 +11,14 @@ img_size = wav[0:2]
 arr_max = wav[2:3]
 scalar = wav[3:4]
 
+# #for sounds not from images
+# img_size = (int(np.sqrt(len(wav)/2)))
+# arr_max = 600000 #completely arbitrary
+# scalar = 32767
+# wav = np.array(wav[0:(img_size**2*2)])
+# print len(wav)
+# print img_size
+
 #delete first 4 elements (info elements)
 wav = np.delete(wav,[0,1,2,3])
 
