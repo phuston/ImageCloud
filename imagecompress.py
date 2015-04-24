@@ -6,7 +6,7 @@ from scipy.io.wavfile import write
 # class Im2Audio():
 	
 
-img = cv2.imread('img/md1.jpg',0)
+img = cv2.imread('img/stripesVertical.png',0)
 
 # Convert image to np array, shift DC to center of image
 dft = cv2.dft(np.float32(img),flags = cv2.DFT_COMPLEX_OUTPUT) 
