@@ -44,19 +44,15 @@ scalar = 32767
 scaled_arr = np.array(reshape_arr/np.abs(arr_max) * scalar)
 
 full_sample = np.concatenate([img_size, np.array([arr_max,scalar]), scaled_arr])
-print full_sample
 
-total = 0
-for i in full_sample:
-	total += i
-averageAmp = total / len(full_sample)
-#print averageAmp
-
-maximum = np.amax(full_sample)
-
-plt.plot(full_sample)
-plt.axis([0,len(full_sample), -averageAmp * 100, averageAmp * 100] )
-#plt.show()
+# total = 0
+# for i in full_sample:
+# 	total += i
+# averageAmp = total / len(full_sample)
+# maximum = np.amax(full_sample)
+# plt.plot(full_sample)
+# plt.axis([0,len(full_sample), -averageAmp * 100, averageAmp * 100] )
+# plt.show()
 
 
 write('test.wav', 44100, full_sample)
