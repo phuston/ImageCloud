@@ -16,3 +16,8 @@ wav = np.delete(wav,[0,1,2])
 # print unscaled_arr
 # reshape_arr = np.reshape(unscaled_arr,img_size)
 # print reshape_arr
+
+
+f_ishift = np.fft.ifftshift(fshift)
+img_back = cv2.idft(f_ishift)
+img_back = cv2.magnitude(img_back[:,:,0],img_back[:,:,1])
