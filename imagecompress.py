@@ -3,7 +3,6 @@ import cv2
 from matplotlib import pyplot as plt
 from scipy.io.wavfile import write
 
-
 class Im2Audio():
     def __init__(self, img_file):
         self.img = cv2.imread(img_file,0)
@@ -54,4 +53,3 @@ class Im2Audio():
 
     def write(self, filename):
         write(filename + '.wav', 44100, self.full_sample)
-
