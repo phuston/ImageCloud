@@ -11,13 +11,14 @@ scalar = wav[3:4]
 # print img_size
 print arr_max
 print scalar
-wav = np.delete(wav,[0,1,2])
-# unscaled_arr = np.array(wav * scalar)
-# print unscaled_arr
+wav = np.delete(wav,[0,1,2,3])
+unscaled_arr = np.array(wav/scalar)
+unscaled_arr = np.array(unscaled_arr*np.abs(arr_max))
+print unscaled_arr
 # reshape_arr = np.reshape(unscaled_arr,img_size)
 # print reshape_arr
 
 
-f_ishift = np.fft.ifftshift(fshift)
-img_back = cv2.idft(f_ishift)
-img_back = cv2.magnitude(img_back[:,:,0],img_back[:,:,1])
+# f_ishift = np.fft.ifftshift(fshift)
+# img_back = cv2.idft(f_ishift)
+# img_back = cv2.magnitude(img_back[:,:,0],img_back[:,:,1])
