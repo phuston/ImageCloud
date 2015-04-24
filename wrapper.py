@@ -12,10 +12,11 @@ from soundread import SoundRead
 
 
 if __name__ == '__main__':
-    imgname = 'img/flower.jpg'
+    imgname = 'img/stripesHorizontal.png'
     wavname = 'out/flower.wav'
 
     im = Im2Audio(imgname)
+    im.plot_mag()
     im.highpass()
     im.shape_and_scale()
     im.write(wavname)
