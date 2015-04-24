@@ -38,11 +38,28 @@ maskHPF[crow-50:crow+50, ccol-50:ccol+50] = 0 # HPF - creates box of 0's in cent
 fshift = dft_shift *maskLPF
 
 # Reshapes 2D array into 1D array
+# reshape_arr = np.reshape(img_back, np.product(img_back.shape))
+
+# scaled_arr = np.int16(reshape_arr/np.max(reshape_arr) * 32767)
+
+# full_sample = np.append(img_size, scaled_arr)
+
+# Generate audio from frequency domain rather than original image
 reshape_arr = np.reshape(fshift, np.product(fshift.shape))
 arr_max = np.max(reshape_arr)
-print arr_max
 scalar = 32767
-scaled_arr = np.int16(reshape_arr/np.max(reshape_arr) * scalar)
+print reshape_arr
+print arr_max
+scaled_arr = np.int16(reshape_arr/np.abs(arr_max) * scalar)
+print scaled_arr
+test = np.array(scaled_arr* np.abs(arr_max))
+test = np.array(test/scalar)
+print test
+
+np.savetxt("array.txt", scaled_arr, newline=" ")
+
+
+# print full_sample
 
 full_sample = np.concatenate([img_size, np.array([arr_max,scalar]), scaled_arr])
 
