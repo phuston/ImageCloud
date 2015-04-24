@@ -3,7 +3,7 @@ import cv2
 from matplotlib import pyplot as plt
 from scipy.io.wavfile import write
 
-class Im2Audio():
+# class Im2Audio():
 	
 
 img = cv2.imread('img/md1.jpg',0)
@@ -35,31 +35,15 @@ maskHPF = np.ones((rows,cols,2),np.uint8)
 maskHPF[crow-50:crow+50, ccol-50:ccol+50] = 0 # HPF - creates box of 0's in center to 'mask' input
 
 # apply mask and inverse DFT
-fshift = dft_shift *maskLPF
+fshift = dft_shift
 
 # Reshapes 2D array into 1D array
-# reshape_arr = np.reshape(img_back, np.product(img_back.shape))
-
-# scaled_arr = np.int16(reshape_arr/np.max(reshape_arr) * 32767)
-
-# full_sample = np.append(img_size, scaled_arr)
-
 # Generate audio from frequency domain rather than original image
 reshape_arr = np.reshape(fshift, np.product(fshift.shape))
 arr_max = np.max(reshape_arr)
 scalar = 32767
-print reshape_arr
-print arr_max
-scaled_arr = np.int16(reshape_arr/np.abs(arr_max) * scalar)
-print scaled_arr
-test = np.array(scaled_arr* np.abs(arr_max))
-test = np.array(test/scalar)
-print test
+scaled_arr = np.array(reshape_arr/np.abs(arr_max) * scalar)
 
-np.savetxt("array.txt", scaled_arr, newline=" ")
-
-
-# print full_sample
 
 full_sample = np.concatenate([img_size, np.array([arr_max,scalar]), scaled_arr])
 
