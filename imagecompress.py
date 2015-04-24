@@ -3,6 +3,9 @@ import cv2
 from matplotlib import pyplot as plt
 from scipy.io.wavfile import write
 
+class Im2Audio():
+	
+
 img = cv2.imread('img/md1.jpg',0)
 
 # Convert image to np array, shift DC to center of image
@@ -12,7 +15,7 @@ dft_shift = np.fft.fftshift(dft)
 magnitude_spectrum = 20*np.log(cv2.magnitude(dft_shift[:,:,0],dft_shift[:,:,1]))
 
 
-# Displays frequency domain view of image - DC centered
+# # Displays frequency domain view of image - DC centered
 # plt.subplot(121),plt.imshow(img, cmap = 'gray')
 # plt.title('Input Image'), plt.xticks([]), plt.yticks([])
 # plt.subplot(122),plt.imshow(magnitude_spectrum, cmap = 'gray')
@@ -31,43 +34,22 @@ maskLPF[crow-50:crow+50, ccol-50:ccol+50] = 1 # LPF - creates box of 1's in cent
 maskHPF = np.ones((rows,cols,2),np.uint8)
 maskHPF[crow-50:crow+50, ccol-50:ccol+50] = 0 # HPF - creates box of 0's in center to 'mask' input
 
-
-
 # apply mask and inverse DFT
-fshift = dft_shift #*maskLPF
-f_ishift = np.fft.ifftshift(fshift)
-img_back = cv2.idft(f_ishift)
-img_back = cv2.magnitude(img_back[:,:,0],img_back[:,:,1])
-
+fshift = dft_shift *maskLPF
 
 # Reshapes 2D array into 1D array
-reshape_arr = np.reshape(img_back, np.product(img_back.shape))
+reshape_arr = np.reshape(fshift, np.product(fshift.shape))
 arr_max = np.max(reshape_arr)
+print arr_max
 scalar = 32767
-scaled_arr = np.int16(reshape_arr/np.max(reshape_arr) * 32767)
+scaled_arr = np.int16(reshape_arr/np.max(reshape_arr) * scalar)
 
-full_sample = np.append(img_size, scaled_arr)
-
-# Generate audio from frequency domain rather than original image
-reshape_arr2 = np.reshape(fshift, np.product(fshift.shape))
-
-scaled_arr2 = np.int16(reshape_arr2/np.abs(np.max(reshape_arr2)) * 32767)
-np.savetxt("array.txt", scaled_arr2, newline=" ")
-
-
-full_sample = np.concatenate([img_size, np.array([arr_max,scalar]), scaled_arr2])
-print full_sample
-
+full_sample = np.concatenate([img_size, np.array([arr_max,scalar]), scaled_arr])
 
 write('test.wav', 44100, full_sample)
-
-
 
 # plt.subplot(121),plt.imshow(img, cmap = 'gray')
 # plt.title('Input Image'), plt.xticks([]), plt.yticks([])
 # plt.subplot(122),plt.imshow(img_back, cmap = 'gray')
 # plt.title('Magnitude Spectrum'), plt.xticks([]), plt.yticks([])
 # plt.show()
-
-# TODO: Implement soundcloud API, but also figure out how to go from wav file back to 2d numpy array representing image
-# Because we have to store image as 1D array, we need to add data to np array representing info about the size of the image 
