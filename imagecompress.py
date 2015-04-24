@@ -6,7 +6,6 @@ from scipy.io.wavfile import write
 	
 
 img = cv2.imread('img/hStripesNew.png',0)
->>>>>>> 72ef7e133254e4c602237cf68c05507c53ba4662
 
 # Convert image to np array, shift DC to center of image
 dft = cv2.dft(np.float32(img),flags = cv2.DFT_COMPLEX_OUTPUT) 
