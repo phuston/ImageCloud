@@ -53,3 +53,16 @@ class Im2Audio():
 
     def write(self, filename):
         write(filename, 44100, self.full_sample)
+
+    def plotWave(self):
+
+    	total = 0
+    	for i in self.full_sample:
+    		total += i
+
+    	av = total / self.full_sample.size
+    	print av
+
+    	plt.plot(self.full_sample)
+    	plt.axis([0, self.full_sample.size, -av * 50, av * 50])
+    	plt.show()
