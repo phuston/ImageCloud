@@ -9,17 +9,21 @@ from scipy.io.wavfile import read, write
 
 from imagecompress import Im2Audio
 from soundread import SoundRead
+from cloud import CloudClient
 
 
 if __name__ == '__main__':
-    imgname = 'img/stripesHorizontal.png'
-    wavname = 'out/flower.wav'
+    imgname = 'img/img.jpg'
+    wavname = 'out/byronpat.wav'
 
     im = Im2Audio(imgname)
     im.plot_mag()
     im.highpass()
     im.shape_and_scale()
     im.write(wavname)
+
+    # sc = CloudClient()
+    # sc.post_track(wavname)
 
     wv = SoundRead(wavname)
     wv.unscale_and_shape()

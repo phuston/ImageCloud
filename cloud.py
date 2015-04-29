@@ -17,7 +17,7 @@ class CloudClient():
 		    password=CLIENT_PASSWORD
 		)
 
-	def post_track(filepath)
+	def post_track(filepath):
 		track = client.post('/tracks', track={
 		    'title': 'SampleTrack',
 		    'sharing': 'private',
