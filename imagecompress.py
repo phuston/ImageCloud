@@ -51,6 +51,30 @@ class Im2Audio():
 
         self.full_sample = np.concatenate([self.img_size, np.array([self.arr_max,self.scalar]), scaled_arr])
 
+    def shape_and_scale2(self):
+        reshape = []
+        X, Y, Z = self.fshift.shape
+        x = y = 0
+        dx = 0
+        dy = -1
+        for z in range(Z):
+            for i in range(max(X, Y)**2):
+                if (-X/2 < x <= X/2) and (-Y/2 < y <= Y/2):
+                    reshape.append(self.fshift[x][y][z])
+                if x == y or (x < 0 and x == -y) or (x > 0 and x == 1-y):
+                    dx, dy = -dy, dx
+                x, y = x+dx, y+dy
+
+        reshape = np.array(reshape)
+        arr_max = np.max(reshape)
+        scalar = 32767
+        scaled_arr = np.array(reshape/np.abs(arr_max) * scalar)
+        print scaled_arr
+        print np.array(self.img_size)
+
+        self.full_sample = np.concatenate([self.img_size, np.array([arr_max,scalar]), scaled_arr])
+
+
     def write(self, filename):
         write(filename, 44100, self.full_sample)
 
@@ -69,6 +93,6 @@ class Im2Audio():
 
 #Generate Plots of Picture as Sound Wave
 
-#image = Im2Audio('img/img.jpg') 
-#image.shape_and_scale()
-#image.plot_wave()
+image = Im2Audio('img/stripesVertical.png') 
+image.shape_and_scale2()
+image.write('out/spiral.wav')

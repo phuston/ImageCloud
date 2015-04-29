@@ -9,7 +9,7 @@ from scipy.io.wavfile import read, write
 
 from imagecompress import Im2Audio
 from soundread import SoundRead
-from cloud import CloudClient
+from cloudwrapper import CloudClient
 
 
 if __name__ == '__main__':
@@ -22,8 +22,8 @@ if __name__ == '__main__':
     im.shape_and_scale()
     im.write(wavname)
 
-    # sc = CloudClient()
-    # sc.post_track(wavname)
+    sc = CloudClient()
+    sc.post_track(wavname)
 
     wv = SoundRead(wavname)
     wv.unscale_and_shape()
