@@ -53,3 +53,22 @@ class Im2Audio():
 
     def write(self, filename):
         write(filename, 44100, self.full_sample)
+
+    def plot_wave(self):
+
+    	total = 0
+    	for i in self.full_sample:
+    		total += i
+
+    	av = total / self.full_sample.size
+
+    	plt.plot(self.full_sample)
+    	plt.axis([0, self.full_sample.size, -av * 10, av * 10])
+    	plt.show()
+
+
+#Generate Plots of Picture as Sound Wave
+
+#image = Im2Audio('img/img.jpg') 
+#image.shape_and_scale()
+#image.plot_wave()
